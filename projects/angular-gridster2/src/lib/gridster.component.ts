@@ -404,16 +404,20 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
-    if (this.getNextPossiblePosition(itemComponent.$item)) {
-      itemComponent.notPlaced = false;
-      itemComponent.item.x = itemComponent.$item.x;
-      itemComponent.item.y = itemComponent.$item.y;
-      itemComponent.itemChanged();
+    if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
+      console.log('disabled autoPositionItem')
     } else {
-      itemComponent.notPlaced = true;
-      if (!this.$options.disableWarnings) {
-        console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
-          JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+      if (this.getNextPossiblePosition(itemComponent.$item)) {
+        itemComponent.notPlaced = false;
+        itemComponent.item.x = itemComponent.$item.x;
+        itemComponent.item.y = itemComponent.$item.y;
+        itemComponent.itemChanged();
+      } else {
+        itemComponent.notPlaced = true;
+        if (!this.$options.disableWarnings) {
+          console.warn('Can\'t be placed in the bounds of the dashboard!/n' +
+            JSON.stringify(itemComponent.item, ['cols', 'rows', 'x', 'y']));
+        }
       }
     }
   }

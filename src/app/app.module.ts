@@ -36,6 +36,8 @@ import {MiscComponent} from './sections/misc/misc.component';
 import {PushComponent} from './sections/push/push.component';
 import {ResizeComponent} from './sections/resize/resize.component';
 import {SwapComponent} from './sections/swap/swap.component';
+import { ExtendFnComponent } from './sections/extend-fn/extend-fn.component';
+import { InsightGridsterDraggerDirective } from './core/insight-gridster.dragger.directive';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -54,6 +56,7 @@ const appRoutes: Routes = [
   {path: 'resize', component: ResizeComponent},
   {path: 'swap', component: SwapComponent},
   {path: 'misc', component: MiscComponent},
+  {path: 'extend-fn', component: ExtendFnComponent},
   {path: '**', redirectTo: ''}
 ];
 
@@ -80,6 +83,8 @@ const appRoutes: Routes = [
     ResizeComponent,
     SwapComponent,
     MiscComponent,
+    ExtendFnComponent,
+    InsightGridsterDraggerDirective
   ],
   imports: [
     BrowserModule,
@@ -90,6 +95,9 @@ const appRoutes: Routes = [
     MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule,
     GridsterModule,
     MarkdownModule.forRoot({loader: HttpClient, markedOptions: {provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}}),
+  ],
+  exports: [
+    InsightGridsterDraggerDirective
   ],
   providers: [],
   bootstrap: [AppComponent]

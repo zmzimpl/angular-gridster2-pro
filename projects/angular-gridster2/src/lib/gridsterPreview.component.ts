@@ -32,6 +32,7 @@ export class GridsterPreviewComponent implements OnDestroy {
         this.gridster.compact.checkCompactItem(this.gridster.movingItem);
       }
       this.renderer.setStyle(this.el, 'display', 'block');
+      this.renderer.setStyle(this.el, 'z-index', this.gridster.movingItem.spliting && this.gridster.movingItem.splitingItemComponent ? 1 : '');
       this.gridster.gridRenderer.updateItem(this.el, this.gridster.movingItem, this.renderer);
     }
   }

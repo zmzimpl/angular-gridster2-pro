@@ -1,0 +1,60 @@
+<div class="options">
+    <a mat-raised-button href="https://github.com/tiberiuzuld/angular-gridster2/tree/master/src/app/sections/drag"
+       target="_blank" class="source-code-button">
+      <mat-icon>open_in_new</mat-icon>
+      Source
+    </a>
+    <markdown [src]="'assets/extend-fn.md'"></markdown>
+  </div>
+  <div class="options-header" *ngIf="options.draggable">
+    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemStack" (ngModelChange)="changedOptions()">
+        Allow Drop Over Items Stack
+    </mat-checkbox>
+    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemSplit" (ngModelChange)="changedOptions()">
+        Allow Drop Over Items Split
+    </mat-checkbox>
+    <!-- <mat-form-field>
+      <input matInput [(ngModel)]="options.draggable.delayStart" type="number" placeholder="Delay Start ms"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.draggable.dragHandleClass" type="text" placeholder="Drag Handle Class"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="options.draggable.ignoreContentClass" type="text" placeholder="Ignore Content Class"
+             (ngModelChange)="changedOptions()">
+    </mat-form-field> -->
+    <button mat-mini-fab [insightGridsterDragger]="item" [insightWrapOptions]="options" class="add-button cols-2">
+        拖拽
+    </button>
+  </div>
+  
+  
+  <gridster [options]="options" [ngStyle]="backgroundStyle">
+    <gridster-item [item]="item" *ngFor="let item of dashboard">
+      <div class="button-holder">
+        <div class="gridster-item-content" *ngIf="item.hasContent">
+          <div class="stuff">
+            <span>Some content to select and click without dragging the widget</span>
+            <a href="https://www.google.com" target="_blank">Link to Google</a>
+          </div>
+        </div>
+        <div class="item-buttons" *ngIf="item.hasContent">
+          <button mat-icon-button mat-raised-button class="drag-handler">
+            <mat-icon>open_with</mat-icon>
+          </button>
+          <button mat-icon-button mat-raised-button class="remove-button" (mousedown)="removeItem($event, item)"
+                  (touchstart)="removeItem($event, item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <label *ngIf="!item.hasContent">{{item.label}}</label>
+        <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
+                (touchstart)="removeItem($event, item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </gridster-item>
+  </gridster>
+  

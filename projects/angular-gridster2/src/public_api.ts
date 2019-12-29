@@ -4,7 +4,7 @@
 
 export {GridsterComponent} from './lib/gridster.component';
 export {GridsterItemComponent} from './lib/gridsterItem.component';
-export {GridsterItem} from './lib/gridsterItem.interface';
+export {GridsterItem, GridsterItemSplitMode} from './lib/gridsterItem.interface';
 export {GridsterItemComponentInterface} from './lib/gridsterItemComponent.interface';
 export {GridsterComponentInterface} from './lib/gridster.interface';
 export {GridsterConfig, GridType, DisplayGrid, CompactType, Draggable, Resizable, PushDirections} from './lib/gridsterConfig.interface';

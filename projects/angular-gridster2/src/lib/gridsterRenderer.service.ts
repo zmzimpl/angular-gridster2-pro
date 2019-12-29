@@ -3,6 +3,7 @@ import {Injectable, Renderer2} from '@angular/core';
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridType} from './gridsterConfig.interface';
 import {GridsterItem} from './gridsterItem.interface';
+import { GridsterItemComponentInterface } from './gridsterItemComponent.interface';
 
 @Injectable()
 export class GridsterRenderer {

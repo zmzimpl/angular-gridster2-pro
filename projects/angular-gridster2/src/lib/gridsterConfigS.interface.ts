@@ -80,6 +80,8 @@ export interface Draggable extends DragBase {
   dragHandleClass: string;
   dropOverItems: boolean;
   dropOverItemsCallback: (source: GridsterItem, target: GridsterItem, grid?: GridsterComponentInterface) => void;
+  dropOverItemStack?: boolean,
+  dropOverItemSplit?: boolean
 }
 
 export interface Resizable extends DragBase {

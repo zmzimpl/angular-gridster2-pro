@@ -16,5 +16,15 @@ export interface GridsterItem {
   minItemArea?: number;
   maxItemArea?: number;
 
+  spliting?: GridsterItemSplitMode,
+  splitingItemComponent?: GridsterItemComponentInterface,
+
   [propName: string]: any;
+}
+/** 分裂模式 */
+export enum GridsterItemSplitMode {
+  up = 'up',
+  down = 'down',
+  left = 'left',
+  right = 'right'
 }

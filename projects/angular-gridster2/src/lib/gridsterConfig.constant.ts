@@ -71,8 +71,10 @@ export const GridsterConfigService: GridsterConfig = {
     start: undefined, // callback when dragging an item starts.
     // Arguments: item, gridsterItem, event
     dropOverItems: false, // enable drop items on top other item
-    dropOverItemsCallback: undefined // callback on drop over another item
+    dropOverItemsCallback: undefined, // callback on drop over another item
     // Arguments: source, target, gridComponent
+    dropOverItemSplit: false, // 允许Item放入另一个Item中切分目标Item的大小
+    dropOverItemStack: false // 允许Item堆叠，即可自由布局
   },
   resizable: {
     delayStart: 0, // milliseconds to delay the start of resize, useful for touch interaction

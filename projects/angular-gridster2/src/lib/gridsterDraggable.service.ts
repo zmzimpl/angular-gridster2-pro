@@ -123,6 +123,12 @@ export class GridsterDraggable {
     GridsterUtils.checkTouchEvent(e);
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    // console.log('gridster', this.gridster);
+    // console.log('gridsterItem', this.gridsterItem.el.offsetTop);
+    // console.log('gridsterItem', this.gridsterItem.el.offsetLeft);
+    // if (this.gridster.movingItem) {
+    //   console.log('movingItem', this.gridster.findItemWithItem(this.gridster.movingItem));
+    // }
     scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
       this.calculateItemPositionFromMousePosition.bind(this));
 
