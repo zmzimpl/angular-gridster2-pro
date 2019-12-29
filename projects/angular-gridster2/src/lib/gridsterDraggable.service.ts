@@ -131,7 +131,6 @@ export class GridsterDraggable {
     // }
     scroll(this.gridster, this.left, this.top, this.width, this.height, e, this.lastMouse,
       this.calculateItemPositionFromMousePosition.bind(this));
-
     this.calculateItemPositionFromMousePosition(e);
   }
 
@@ -163,8 +162,12 @@ export class GridsterDraggable {
     this.gridster.updateGrid();
     this.path = [];
     if (this.gridster.options.draggable && this.gridster.options.draggable.stop) {
-      Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
-        .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
+          .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
+      } else {
+
+      }
     } else {
       this.makeDrag();
     }

@@ -51,6 +51,8 @@ export class ExtendFnComponent implements OnInit {
       disablePushOnResize: false,
       pushResizeItems: true,
       scrollToNewItems: true,
+      disableScrollHorizontal: true,
+      disableScrollVertical: true,
       swap: false,
       draggable: {
         delayStart: 0,
