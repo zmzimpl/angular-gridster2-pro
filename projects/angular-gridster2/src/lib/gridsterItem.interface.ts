@@ -19,6 +19,10 @@ export interface GridsterItem {
   spliting?: GridsterItemSplitMode,
   splitingItemComponent?: GridsterItemComponentInterface,
 
+  left?: number;
+  top?: number;
+  zIndex?: number;
+
   [propName: string]: any;
 }
 /** 分裂模式 */

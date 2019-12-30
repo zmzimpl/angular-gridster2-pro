@@ -28,7 +28,7 @@ export class GridsterEmptyCell {
   destroy(): void {
     delete this.initialItem;
     delete this.gridster.movingItem;
-    if (this.gridster.previewStyle) {
+    if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {
       this.gridster.previewStyle();
     }
     delete this.gridster;
@@ -62,7 +62,9 @@ export class GridsterEmptyCell {
       });
       this.emptyCellExit = this.gridster.renderer.listen('document', 'dragend', () => {
         this.gridster.movingItem = null;
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       });
     } else if (!this.gridster.$options.enableEmptyCellDrop && this.emptyCellDrop && this.emptyCellMove && this.emptyCellExit) {
       this.emptyCellDrop();
@@ -164,7 +166,9 @@ export class GridsterEmptyCell {
       e.dataTransfer.dropEffect = 'none';
       this.gridster.movingItem = null;
     }
-    this.gridster.previewStyle();
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle();
+    }
   }
 
   emptyCellMouseDown(e: any): void {
@@ -180,7 +184,9 @@ export class GridsterEmptyCell {
     }
     this.initialItem = item;
     this.gridster.movingItem = item;
-    this.gridster.previewStyle();
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle();
+    }
     this.gridster.zone.runOutsideAngular(() => {
       this.emptyCellMMove = this.gridster.renderer.listen('window', 'mousemove', this.emptyCellMouseMove.bind(this));
       this.emptyCellMMoveTouch = this.gridster.renderer.listen('window', 'touchmove', this.emptyCellMouseMove.bind(this));
@@ -200,7 +206,9 @@ export class GridsterEmptyCell {
     }
 
     this.gridster.movingItem = item;
-    this.gridster.previewStyle();
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle();
+    }
   }
 
   emptyCellMouseUp(e: any): void {
@@ -219,7 +227,9 @@ export class GridsterEmptyCell {
       this.initialItem = null;
       if (this.gridster) {
         this.gridster.movingItem = null;
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
     });
     this.gridster.cdRef.markForCheck();

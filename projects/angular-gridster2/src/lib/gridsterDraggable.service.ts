@@ -15,6 +15,8 @@ export class GridsterDraggable {
     clientX: number,
     clientY: number
   };
+  mouseOffsetX: number;
+  mouseOffsetY: number;
   offsetLeft: number;
   offsetTop: number;
   margin: number;
@@ -57,7 +59,7 @@ export class GridsterDraggable {
   }
 
   destroy(): void {
-    if (this.gridster.previewStyle) {
+    if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {
       this.gridster.previewStyle(true);
     }
     delete this.gridsterItem;
@@ -106,10 +108,14 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top - this.margin;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
+    this.mouseOffsetX = e.offsetX;
+    this.mouseOffsetY = e.offsetY;
     this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
-    this.gridster.previewStyle(true);
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle(true);
+    }
     this.push = new GridsterPush(this.gridsterItem);
     this.swap = new GridsterSwap(this.gridsterItem);
     this.gridster.dragInProgress = true;
@@ -135,8 +141,13 @@ export class GridsterDraggable {
   }
 
   calculateItemPositionFromMousePosition(e: any): void {
-    this.left = e.clientX + this.offsetLeft - this.diffLeft;
-    this.top = e.clientY + this.offsetTop - this.diffTop;
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.left = e.clientX + this.offsetLeft - this.diffLeft;
+      this.top = e.clientY + this.offsetTop - this.diffTop;
+    } else {
+      this.left = e.clientX - this.gridster.el.offsetLeft - this.mouseOffsetX - this.margin ;
+      this.top = e.clientY - this.mouseOffsetY - this.margin;
+    }
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
@@ -174,7 +185,9 @@ export class GridsterDraggable {
     setTimeout(() => {
       if (this.gridster) {
         this.gridster.movingItem = null;
-        this.gridster.previewStyle(true);
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle(true);
+        }
       }
     });
   }
@@ -266,7 +279,9 @@ export class GridsterDraggable {
       }
       this.push.checkPushBack();
     }
-    this.gridster.previewStyle(true);
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle(true);
+    }
   }
 
   toggle() {

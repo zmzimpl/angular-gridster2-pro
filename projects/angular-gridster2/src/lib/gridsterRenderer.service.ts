@@ -1,4 +1,4 @@
-import {Injectable, Renderer2} from '@angular/core';
+import {Injectable, Renderer2, ElementRef} from '@angular/core';
 
 import {GridsterComponentInterface} from './gridster.interface';
 import {GridType} from './gridsterConfig.interface';
@@ -175,8 +175,16 @@ export class GridsterRenderer {
       const transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
       renderer.setStyle(el, 'transform', transform);
     } else {
-      renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
-      renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
+        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      } else {
+        // console.log(el.offsetLeft)
+        // console.log(el.offsetTop)
+        console.log(this.getLeftMargin() + x)
+        renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
+        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+      }
     }
   }
 

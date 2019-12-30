@@ -43,13 +43,6 @@ export class InsightGridsterDraggerDirective {
     //   eventName: InsightEventNames.emptyChartDragStart,
     //   param: this.draggingItem
     // });
-    if (this.draggingItem) {
-      this.insightWrapOptions.defaultItemRows = 1;
-      this.insightWrapOptions.defaultItemCols = 1;
-      this.insightWrapOptions.minItemRows = 1;
-      this.insightWrapOptions.minItemCols = 1;
-      this.insightWrapOptions.api.optionsChanged();
-    }
   }
 
   /** 拖拽中事件 */

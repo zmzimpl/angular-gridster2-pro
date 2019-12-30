@@ -34,14 +34,14 @@ export class ExtendFnComponent implements OnInit {
 
   ngOnInit() {
     this.options = {
-      compactType: CompactType.CompactUpAndLeft,
+      compactType: CompactType.None,
       minCols: 12,
       minRows: 12,
-      defaultItemCols: 12,
-      defaultItemRows: 12,
+      defaultItemCols: 1,
+      defaultItemRows: 1,
       maxCols: 12,
       maxRows: 12,
-      minItemCols: 2,
+      minItemCols: 1,
       minItemRows: 1,
       gridType: GridType.Fit,
       displayGrid: DisplayGrid.None,
@@ -65,7 +65,7 @@ export class ExtendFnComponent implements OnInit {
         dropOverItems: true,
         dropOverItemsCallback: ExtendFnComponent.overlapEvent,
         dropOverItemStack: true,
-        dropOverItemSplit:true,
+        dropOverItemSplit:false,
       },
       resizable: {
         enabled: true
@@ -75,6 +75,20 @@ export class ExtendFnComponent implements OnInit {
       emptyCellDropCallback: this.createItem.bind(this),
 
     };
+  }
+
+  stackChanged(isStack: boolean) {
+    if (isStack) {
+      if (this.options.api && this.options.api.optionsChanged) {
+        this.options.compactType = CompactType.None;
+        this.options.api.optionsChanged();
+      }
+    } else {
+      if (this.options.api && this.options.api.optionsChanged) {
+        this.options.compactType = CompactType.CompactUpAndLeft;
+        this.options.api.optionsChanged();
+      }
+    }
   }
 
   changedOptions() {

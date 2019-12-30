@@ -60,7 +60,7 @@ export class GridsterResizable {
   }
 
   destroy(): void {
-    if (this.gridster.previewStyle) {
+    if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {
       this.gridster.previewStyle();
     }
     delete this.gridsterItem;
@@ -115,7 +115,9 @@ export class GridsterResizable {
     this.minWidth = this.gridster.positionXToPixels(this.gridsterItem.$item.minItemCols || this.gridster.$options.minItemCols)
       - this.margin;
     this.gridster.movingItem = this.gridsterItem.$item;
-    this.gridster.previewStyle();
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.gridster.previewStyle();
+    }
     this.push = new GridsterPush(this.gridsterItem);
     this.pushResize = new GridsterPushResize(this.gridsterItem);
     this.gridster.dragInProgress = true;
@@ -192,7 +194,9 @@ export class GridsterResizable {
       this.gridsterItem.renderer.removeClass(this.gridsterItem.el, 'gridster-item-resizing');
       if (this.gridster) {
         this.gridster.movingItem = null;
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
     });
   }
@@ -244,7 +248,9 @@ export class GridsterResizable {
         this.setItemHeight(this.gridster.positionYToPixels(this.gridsterItem.$item.rows) - this.margin);
         return;
       } else {
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
@@ -275,7 +281,9 @@ export class GridsterResizable {
         this.setItemWidth(this.gridster.positionXToPixels(this.gridsterItem.$item.cols) - this.margin);
         return;
       } else {
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
@@ -301,7 +309,9 @@ export class GridsterResizable {
         this.setItemHeight(this.gridster.positionYToPixels(this.gridsterItem.$item.rows) - this.margin);
         return;
       } else {
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
       this.pushResize.checkPushBack();
       this.push.checkPushBack();
@@ -326,7 +336,9 @@ export class GridsterResizable {
         this.setItemWidth(this.gridster.positionXToPixels(this.gridsterItem.$item.cols) - this.margin);
         return;
       } else {
-        this.gridster.previewStyle();
+        if (!this.gridster.$options.draggable.dropOverItemStack) {
+          this.gridster.previewStyle();
+        }
       }
       this.pushResize.checkPushBack();
       this.push.checkPushBack();

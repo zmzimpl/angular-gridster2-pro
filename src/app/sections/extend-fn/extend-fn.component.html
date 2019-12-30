@@ -7,7 +7,7 @@
     <markdown [src]="'assets/extend-fn.md'"></markdown>
   </div>
   <div class="options-header" *ngIf="options.draggable">
-    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemStack" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemStack" (ngModelChange)="stackChanged($event)">
         Allow Drop Over Items Stack
     </mat-checkbox>
     <mat-checkbox [(ngModel)]="options.draggable.dropOverItemSplit" (ngModelChange)="changedOptions()">
