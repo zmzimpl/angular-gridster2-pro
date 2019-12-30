@@ -26,6 +26,7 @@ export class ExtendFnComponent implements OnInit {
 
   static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
     // console.info('eventStop', item, itemComponent, event);
+    console.log(item);
   }
 
   static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent) {
@@ -37,10 +38,10 @@ export class ExtendFnComponent implements OnInit {
       compactType: CompactType.None,
       minCols: 12,
       minRows: 12,
+      maxCols: 24,
+      maxRows: 24,
       defaultItemCols: 1,
       defaultItemRows: 1,
-      maxCols: 12,
-      maxRows: 12,
       minItemCols: 1,
       minItemRows: 1,
       gridType: GridType.Fit,
@@ -81,11 +82,15 @@ export class ExtendFnComponent implements OnInit {
     if (isStack) {
       if (this.options.api && this.options.api.optionsChanged) {
         this.options.compactType = CompactType.None;
+        this.options.disableScrollHorizontal = false;
+        this.options.disableScrollVertical = false;
         this.options.api.optionsChanged();
       }
     } else {
       if (this.options.api && this.options.api.optionsChanged) {
         this.options.compactType = CompactType.CompactUpAndLeft;
+        this.options.disableScrollHorizontal = true;
+        this.options.disableScrollVertical = true;
         this.options.api.optionsChanged();
       }
     }

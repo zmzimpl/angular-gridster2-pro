@@ -179,11 +179,30 @@ export class GridsterRenderer {
         renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
         renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
       } else {
-        // console.log(el.offsetLeft)
-        // console.log(el.offsetTop)
-        console.log(this.getLeftMargin() + x)
-        renderer.setStyle(el, 'left', this.getLeftMargin() + x + 'px');
-        renderer.setStyle(el, 'top', this.getTopMargin() + y + 'px');
+        let left = 0;
+        let top = 0;
+        if (x < 0 || y < 0) {
+          if (x < 0 && y >= 0) {
+            left = this.getLeftMargin();
+            top = this.getTopMargin() + y;
+          }
+          if (x >= 0 && y < 0) {
+            left = this.getLeftMargin() + x;
+            top = this.getTopMargin();
+          }
+          if (x < 0 && y < 0) {
+            left = this.getLeftMargin();
+            top = this.getTopMargin();
+          }
+        } else {
+          left = this.getLeftMargin() + x;
+          top = this.getTopMargin() + y;
+        }
+        renderer.setStyle(el, 'left', left + 'px');
+        renderer.setStyle(el, 'top', top + 'px');
+        if (this.gridster.movingItem) {
+          Object.assign(this.gridster.movingItem, { left, top });
+        }
       }
     }
   }

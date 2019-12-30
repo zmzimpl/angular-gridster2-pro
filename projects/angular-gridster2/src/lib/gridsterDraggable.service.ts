@@ -145,8 +145,8 @@ export class GridsterDraggable {
       this.left = e.clientX + this.offsetLeft - this.diffLeft;
       this.top = e.clientY + this.offsetTop - this.diffTop;
     } else {
-      this.left = e.clientX - this.gridster.el.offsetLeft - this.mouseOffsetX - this.margin ;
-      this.top = e.clientY - this.mouseOffsetY - this.margin;
+      this.left = e.clientX - this.gridster.el.offsetLeft - this.mouseOffsetX - this.margin - this.gridster.el.scrollLeft;
+      this.top = e.clientY - this.mouseOffsetY - this.margin + (this.gridster.el.parentElement.scrollTop + this.offsetTop);
     }
     this.calculateItemPosition();
     this.lastMouse.clientX = e.clientX;
@@ -177,7 +177,7 @@ export class GridsterDraggable {
         Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
           .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
       } else {
-
+        Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
       }
     } else {
       this.makeDrag();
