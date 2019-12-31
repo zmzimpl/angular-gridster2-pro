@@ -32,8 +32,15 @@ export class GridsterRenderer {
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
       renderer.setStyle(el, 'margin-right', '');
     } else {
-      const x = Math.round(this.gridster.curColWidth * item.x);
-      const y = Math.round(this.gridster.curRowHeight * item.y);
+      let x = 0;
+      let y = 0;
+      if (this.gridster.$options.draggable.dropOverItemStack) {
+        x = item.left !== undefined ? item.left - this.gridster.$options.margin : Math.round(this.gridster.curColWidth * item.x);
+        y = item.top !== undefined ? item.top - this.gridster.$options.margin : Math.round(this.gridster.curRowHeight * item.y);
+      } else {
+        x = Math.round(this.gridster.curColWidth * item.x);
+        y = Math.round(this.gridster.curRowHeight * item.y);
+      }
       const width = this.gridster.curColWidth * item.cols - this.gridster.$options.margin;
       const height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
       // set the cell style

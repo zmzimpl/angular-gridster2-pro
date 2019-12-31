@@ -24,11 +24,6 @@ export class ExtendFnComponent implements OnInit {
     // console.info('eventStart', item, itemComponent, event);
   }
 
-  static eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
-    // console.info('eventStop', item, itemComponent, event);
-    console.log(item);
-  }
-
   static overlapEvent(source: GridsterItem, target: GridsterItem, grid: GridsterComponent) {
     // console.log('overlap', source, target, grid);
   }
@@ -61,7 +56,7 @@ export class ExtendFnComponent implements OnInit {
         // ignoreContentClass: 'gridster-item-content',
         // ignoreContent: true,
         dragHandleClass: 'drag-handler',
-        stop: ExtendFnComponent.eventStop,
+        stop: this.eventStop.bind(this),
         start: ExtendFnComponent.eventStart,
         dropOverItems: true,
         dropOverItemsCallback: ExtendFnComponent.overlapEvent,
@@ -76,6 +71,17 @@ export class ExtendFnComponent implements OnInit {
       emptyCellDropCallback: this.createItem.bind(this),
 
     };
+    this.dashboard = [
+      {cols: 2, rows: 1, y: 0, x: 0, left: 100, top: 50},
+      {cols: 2, rows: 2, y: 0, x: 2, left: 120, top: 60},
+    ]
+  }
+  
+  eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
+    // console.info('eventStop', item, itemComponent, event);
+    console.log(item);
+    Object.assign(item, { ...itemComponent.$item });
+    console.log(this.dashboard);
   }
 
   stackChanged(isStack: boolean) {
@@ -100,6 +106,18 @@ export class ExtendFnComponent implements OnInit {
     if (this.options.api && this.options.api.optionsChanged) {
       this.dashboard = [];
       this.options.api.optionsChanged();
+    }
+  }
+
+  saveLocalStorage() {
+    localStorage.setItem('dashboard', JSON.stringify(this.dashboard));
+  }
+
+  restoreLocalStorage() {
+    const items = localStorage.getItem('dashboard');
+    const temp = JSON.parse(items ? items : '');
+    if (temp) {
+      this.dashboard = temp;
     }
   }
 

@@ -34,7 +34,6 @@ export class InsightGridsterDraggerDirective {
       }
     }
     this.renderer.setAttribute(this.el.nativeElement, 'dragChannel', 'gridster');
-    console.log(this.el.nativeElement)
     if (evt.dataTransfer) {
       evt.dataTransfer.setData('text', 'dragging .... ');
       evt.dataTransfer.dropEffect = 'copy';

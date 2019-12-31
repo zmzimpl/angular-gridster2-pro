@@ -158,7 +158,6 @@ export class GridsterEmptyCell {
       return;
     }
     const item = this.getValidItemFromEvent(e);
-    console.log(item);
     if (item) {
       e.dataTransfer.dropEffect = 'move';
       this.gridster.movingItem = item;
@@ -198,9 +197,7 @@ export class GridsterEmptyCell {
   emptyCellMouseMove(e: any): void {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e);
     const item = this.getValidItemFromEvent(e, this.initialItem);
-    console.log(item);
     if (!item) {
       return;
     }

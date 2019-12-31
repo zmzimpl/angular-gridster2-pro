@@ -60,6 +60,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       minItemCols: undefined,
       maxItemArea: undefined,
       minItemArea: undefined,
+      left: undefined,
+      top: undefined,
+      zIndex: undefined
     });
   }
 
@@ -79,8 +82,15 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   }
 
   updateItemSize() {
-    const top = this.$item.y * this.gridster.curRowHeight;
-    const left = this.$item.x * this.gridster.curColWidth;
+    let top = 0;
+    let left = 0;
+    if (this.gridster.$options.draggable.dropOverItemStack) {
+      top = this.item.top !== undefined ? this.item.top : this.$item.y * this.gridster.curRowHeight;
+      left = this.item.left !== undefined ? this.item.left : this.$item.x * this.gridster.curColWidth;
+    } else {
+      top = this.$item.y * this.gridster.curRowHeight;
+      left = this.$item.x * this.gridster.curColWidth;
+    }
     const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
     const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
 

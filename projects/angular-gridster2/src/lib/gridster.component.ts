@@ -329,6 +329,12 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         itemComponent.notPlaced = true;
       }
     }
+    if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
+      if (itemComponent.item.left !== undefined && itemComponent.item.top !== undefined) {
+        itemComponent.left = itemComponent.item.left;
+        itemComponent.top = itemComponent.item.top;
+      }
+    }
     this.grid.push(itemComponent);
     this.calculateLayoutDebounce();
   }
