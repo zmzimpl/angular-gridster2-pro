@@ -10,7 +10,7 @@
     <mat-checkbox [(ngModel)]="options.draggable.dropOverItemStack" (ngModelChange)="stackChanged($event)">
         Allow Drop Over Items Stack
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemSplit" (ngModelChange)="changedOptions()">
+    <mat-checkbox [(ngModel)]="options.draggable.dropOverItemSplit" (ngModelChange)="splitChanged($event)">
         Allow Drop Over Items Split
     </mat-checkbox>
 
@@ -65,3 +65,12 @@
     </gridster-item>
   </gridster>
   
+  <ng-template #dialogTpl>
+    <h1 mat-dialog-title>保存成功</h1>
+    <div mat-dialog-content>
+      <p>当前布局已保存在本地缓存中，刷新界面点击恢复可查看效果！</p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="close()">Ok</button>
+    </div>
+  </ng-template>

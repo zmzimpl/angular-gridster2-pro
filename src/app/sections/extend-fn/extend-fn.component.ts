@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType, CompactType} from 'angular-gridster2';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-extend-fn',
@@ -7,6 +8,9 @@ import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterIt
   styleUrls: ['./extend-fn.component.css']
 })
 export class ExtendFnComponent implements OnInit {
+
+  @ViewChild('dialogTpl', { static: false }) dialogTpl: TemplateRef<any>;
+
   options: GridsterConfig;
   dashboard: Array<GridsterItem> = [];
   emptyCellDropChannel: string = 'dragChannel';
@@ -28,13 +32,15 @@ export class ExtendFnComponent implements OnInit {
     // console.log('overlap', source, target, grid);
   }
 
+  constructor(private dialog: MatDialog) {}
+
   ngOnInit() {
     this.options = {
       compactType: CompactType.None,
       minCols: 12,
       minRows: 12,
-      maxCols: 24,
-      maxRows: 24,
+      maxCols: 12,
+      maxRows: 12,
       defaultItemCols: 1,
       defaultItemRows: 1,
       minItemCols: 1,
@@ -102,6 +108,17 @@ export class ExtendFnComponent implements OnInit {
     }
   }
 
+  splitChanged(isSplit: boolean) {
+    if (isSplit) {
+      if (this.options.api && this.options.api.optionsChanged && this.options.draggable) {
+        this.options.draggable.dropOverItemStack = false;
+        this.options.disableScrollVertical = true;
+        this.options.disableScrollHorizontal = true;
+        this.options.api.optionsChanged();
+      }
+    }
+  }
+
   changedOptions() {
     if (this.options.api && this.options.api.optionsChanged) {
       this.dashboard = [];
@@ -111,6 +128,11 @@ export class ExtendFnComponent implements OnInit {
 
   saveLocalStorage() {
     localStorage.setItem('dashboard', JSON.stringify(this.dashboard));
+    this.dialog.open(this.dialogTpl)
+  }
+
+  close() {
+    this.dialog.closeAll();
   }
 
   restoreLocalStorage() {
