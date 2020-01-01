@@ -115,8 +115,11 @@ export class GridsterPushResize {
     gridsterItemCollide.$item.rows = backUpRows + backUpY - gridsterItemCollide.$item.y;
     if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局下调整大小时这里会影响到其他的item
+        gridsterItemCollide.setSize();
+        this.addToPushed(gridsterItemCollide);
+      }
       this.push(gridsterItem, direction);
       return true;
     } else {
@@ -132,8 +135,11 @@ export class GridsterPushResize {
     gridsterItemCollide.$item.rows = gridsterItem.$item.y - gridsterItemCollide.$item.y;
     if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局下调整大小时这里会影响到其他的item
+        gridsterItemCollide.setSize();
+        this.addToPushed(gridsterItemCollide);
+      }
       this.push(gridsterItem, direction);
       return true;
     } else {
@@ -150,8 +156,11 @@ export class GridsterPushResize {
     gridsterItemCollide.$item.cols = backUpCols + backUpX - gridsterItemCollide.$item.x;
     if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局下调整大小时这里会影响到其他的item
+        gridsterItemCollide.setSize();
+        this.addToPushed(gridsterItemCollide);
+      }
       this.push(gridsterItem, direction);
       return true;
     } else {
@@ -167,8 +176,11 @@ export class GridsterPushResize {
     gridsterItemCollide.$item.cols = gridsterItem.$item.x - gridsterItemCollide.$item.x;
     if (!GridsterComponent.checkCollisionTwoItems(gridsterItemCollide.$item, gridsterItem.$item)
       && !this.gridster.checkGridCollision(gridsterItemCollide.$item)) {
-      gridsterItemCollide.setSize();
-      this.addToPushed(gridsterItemCollide);
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局下调整大小时这里会影响到其他的item
+        gridsterItemCollide.setSize();
+        this.addToPushed(gridsterItemCollide);
+      }
       this.push(gridsterItem, direction);
       return true;
     } else {

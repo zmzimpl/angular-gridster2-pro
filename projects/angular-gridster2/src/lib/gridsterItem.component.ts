@@ -85,8 +85,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     let top = 0;
     let left = 0;
     if (this.gridster.$options.draggable.dropOverItemStack) {
-      top = this.item.top !== undefined ? this.item.top : this.$item.y * this.gridster.curRowHeight;
-      left = this.item.left !== undefined ? this.item.left : this.$item.x * this.gridster.curColWidth;
+      top = this.$item.top !== undefined ? this.$item.top : this.$item.y * this.gridster.curRowHeight;
+      left = this.$item.left !== undefined ? this.$item.left : this.$item.x * this.gridster.curColWidth;
     } else {
       top = this.$item.y * this.gridster.curRowHeight;
       left = this.$item.x * this.gridster.curColWidth;
@@ -138,7 +138,10 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       this.item.rows = this.$item.rows;
       this.item.x = this.$item.x;
       this.item.y = this.$item.y;
-      this.gridster.calculateLayoutDebounce();
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局下调整大小松开鼠标时这里会影响到其他的item
+        this.gridster.calculateLayoutDebounce();
+      }
       this.itemChanged();
     }
   }
