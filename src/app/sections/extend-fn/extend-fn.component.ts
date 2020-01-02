@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridType, CompactType} from 'angular-gridster2';
+import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridType, CompactType, GridsterItemComponentInterface, GridsterComponentInterface} from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -78,8 +78,8 @@ export class ExtendFnComponent implements OnInit {
 
     };
     this.dashboard = [
-      {cols: 2, rows: 1, y: 0, x: 0, left: 100, top: 50},
-      {cols: 2, rows: 2, y: 0, x: 2, left: 120, top: 60},
+      {cols: 2, rows: 2, y: 0, x: 0, left: 100, top: 50},
+      {cols: 2, rows: 4, y: 0, x: 2, left: 120, top: 60},
     ]
   }
   
@@ -92,10 +92,11 @@ export class ExtendFnComponent implements OnInit {
 
   stackChanged(isStack: boolean) {
     if (isStack) {
-      if (this.options.api && this.options.api.optionsChanged) {
+      if (this.options.api && this.options.api.optionsChanged && this.options.draggable) {
+        this.options.draggable.dropOverItemSplit = false;
         this.options.compactType = CompactType.None;
-        this.options.disableScrollHorizontal = false;
-        this.options.disableScrollVertical = false;
+        this.options.disableScrollHorizontal = true;
+        this.options.disableScrollVertical = true;
         this.options.api.optionsChanged();
       }
     } else {
@@ -117,6 +118,10 @@ export class ExtendFnComponent implements OnInit {
         this.options.api.optionsChanged();
       }
     }
+  }
+
+  zIndexChanged(gridster: GridsterComponentInterface, gridsterItem: GridsterItemComponentInterface) {
+    gridster.gridRenderer.updateItem(gridsterItem.el, gridsterItem.item, gridsterItem.renderer);
   }
 
   changedOptions() {
@@ -147,6 +152,8 @@ export class ExtendFnComponent implements OnInit {
    * 创建一个图表
    */
   createItem(event: MouseEvent, item: GridsterItem) {
+    item.rows = 2;
+    item.cols = 2;
     item.minItemRows = this.options.minItemRows;
     item.minItemCols = this.options.minItemCols;
     this.dashboard.push(item);

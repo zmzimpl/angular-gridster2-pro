@@ -1,3 +1,25 @@
 .mat-dialog-actions {
     justify-content: flex-end;
 }
+
+.chart-header {
+    position: relative;
+}
+
+.title {
+    padding-left: 1em;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    text-align: inherit;
+}
+.main-title {
+    height: 28px;
+    line-height: 28px;
+}
+
+  .drag-handler {
+    min-height: 28px;
+    cursor: move;
+  }

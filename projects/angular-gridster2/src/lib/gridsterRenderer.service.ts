@@ -37,6 +37,9 @@ export class GridsterRenderer {
       if (this.gridster.$options.draggable.dropOverItemStack) {
         x = item.left !== undefined ? item.left - this.gridster.$options.margin : Math.round(this.gridster.curColWidth * item.x);
         y = item.top !== undefined ? item.top - this.gridster.$options.margin : Math.round(this.gridster.curRowHeight * item.y);
+        if (item.zIndex) {
+          renderer.setStyle(el, 'z-index', item.zIndex);
+        }
       } else {
         x = Math.round(this.gridster.curColWidth * item.x);
         y = Math.round(this.gridster.curRowHeight * item.y);
@@ -207,6 +210,7 @@ export class GridsterRenderer {
         }
         renderer.setStyle(el, 'left', left + 'px');
         renderer.setStyle(el, 'top', top + 'px');
+        // renderer.setStyle(el, 'z-index', this.gridster.movingItem && this.gridster.movingItem.zIndex ? this.gridster.movingItem.zIndex : 1);
         if (this.gridster.movingItem) {
           Object.assign(this.gridster.movingItem, { left, top });
         }
