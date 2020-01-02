@@ -152,8 +152,10 @@ export class ExtendFnComponent implements OnInit {
    * 创建一个图表
    */
   createItem(event: MouseEvent, item: GridsterItem) {
-    item.rows = 2;
-    item.cols = 2;
+    if (this.options.draggable &&　this.options.draggable.dropOverItemStack)　{
+      item.rows = 2;
+      item.cols = 2;
+    }
     item.minItemRows = this.options.minItemRows;
     item.minItemCols = this.options.minItemCols;
     this.dashboard.push(item);

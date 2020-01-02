@@ -210,7 +210,6 @@ export class GridsterRenderer {
         }
         renderer.setStyle(el, 'left', left + 'px');
         renderer.setStyle(el, 'top', top + 'px');
-        // renderer.setStyle(el, 'z-index', this.gridster.movingItem && this.gridster.movingItem.zIndex ? this.gridster.movingItem.zIndex : 1);
         if (this.gridster.movingItem) {
           Object.assign(this.gridster.movingItem, { left, top });
         }

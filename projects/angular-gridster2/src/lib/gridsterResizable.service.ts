@@ -93,7 +93,7 @@ export class GridsterResizable {
     this.cancelOnBlur = this.gridsterItem.renderer.listen('window', 'blur', this.dragStopFunction);
     this.touchend = this.gridsterItem.renderer.listen('document', 'touchend', this.dragStopFunction);
     this.touchcancel = this.gridsterItem.renderer.listen('document', 'touchcancel', this.dragStopFunction);
-
+    
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
@@ -152,6 +152,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleSE;
     }
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', 9999);
   }
 
   dragMove(e: any): void {
@@ -199,6 +200,7 @@ export class GridsterResizable {
         }
       }
     });
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', this.gridsterItem.item.zIndex || 1);
   }
 
   cancelResize(): void {

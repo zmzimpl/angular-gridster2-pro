@@ -121,6 +121,7 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', 9999);
   }
 
   dragMove(e: any): void {
@@ -184,6 +185,7 @@ export class GridsterDraggable {
         }
       }
     });
+    this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', this.gridsterItem.item.zIndex || 1);
   }
 
   cancelDrag() {

@@ -41,7 +41,7 @@
   <gridster [options]="options" #gridster [ngStyle]="backgroundStyle">
     <gridster-item [item]="item" #gridsterItem *ngFor="let item of dashboard;let i = index">
       <div class="button-holder">
-        <div class="gridster-item-content">
+        <div class="gridster-item-content" *ngIf="options?.draggable?.dropOverItemStack">
           <mat-form-field class="example-full-width">
             <input type="number" matInput placeholder="z-index" [(ngModel)]="item.zIndex" (ngModelChange)="zIndexChanged(gridster, gridsterItem)">
           </mat-form-field>
