@@ -326,7 +326,7 @@ export class GridsterEmptyCell {
     //   return;
     // }
     // 非分裂需要校验单元格冲突
-    if (!this.gridster.$options.draggable.dropOverItemSplit && this.gridster.checkCollision(item)) {
+    if (!this.gridster.$options.draggable.dropOverItemSplit && !this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(item)) {
       return;
     }
     return item;

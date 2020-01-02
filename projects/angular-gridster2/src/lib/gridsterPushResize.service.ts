@@ -123,8 +123,11 @@ export class GridsterPushResize {
       this.push(gridsterItem, direction);
       return true;
     } else {
-      gridsterItemCollide.$item.y = backUpY;
-      gridsterItemCollide.$item.rows = backUpRows;
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局模式下这里会限制item大小的调整
+        gridsterItemCollide.$item.y = backUpY;
+        gridsterItemCollide.$item.rows = backUpRows;
+      }
     }
     return false;
   }
@@ -143,7 +146,10 @@ export class GridsterPushResize {
       this.push(gridsterItem, direction);
       return true;
     } else {
-      gridsterItemCollide.$item.rows = backUpRows;
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局模式下这里会限制item大小的调整
+        gridsterItemCollide.$item.rows = backUpRows;
+      }
     }
     return false;
   }
@@ -164,8 +170,11 @@ export class GridsterPushResize {
       this.push(gridsterItem, direction);
       return true;
     } else {
-      gridsterItemCollide.$item.x = backUpX;
-      gridsterItemCollide.$item.cols = backUpCols;
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局模式下这里会限制item大小的调整
+        gridsterItemCollide.$item.x = backUpX;
+        gridsterItemCollide.$item.cols = backUpCols;
+      }
     }
     return false;
   }
@@ -184,7 +193,10 @@ export class GridsterPushResize {
       this.push(gridsterItem, direction);
       return true;
     } else {
-      gridsterItemCollide.$item.cols = backUpCols;
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        // 自由布局模式下这里会限制item大小的调整
+        gridsterItemCollide.$item.cols = backUpCols;
+      }
     }
     return false;
   }
