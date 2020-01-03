@@ -47,6 +47,8 @@ export class GridsterResizable {
   width: number;
   height: number;
   newPosition: number;
+  mouseOffsetX: number;
+  mouseOffsetY: number;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -82,6 +84,7 @@ export class GridsterResizable {
     }
     e.stopPropagation();
     e.preventDefault();
+    this.resizeEventScrollType = {w: false, e: false, n: false, s: false};
     this.dragFunction = this.dragMove.bind(this);
     this.dragStopFunction = this.dragStop.bind(this);
     this.zone.runOutsideAngular(() => {
@@ -102,10 +105,16 @@ export class GridsterResizable {
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
     this.bottom = this.gridsterItem.top + this.gridsterItem.height;
+    // if (this.gridsterItem.item.left) {
+    //   this.right = this.gridsterItem.item.left + this.gridsterItem.width;
+    // } else {
+    // }
     this.right = this.gridsterItem.left + this.gridsterItem.width;
     this.margin = this.gridster.$options.margin;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
+    this.mouseOffsetX = e.offsetX;
+    this.mouseOffsetY = e.offsetY;
     this.diffLeft = e.clientX + this.offsetLeft - this.left;
     this.diffRight = e.clientX + this.offsetLeft - this.right;
     this.diffTop = e.clientY + this.offsetTop - this.top;
@@ -152,6 +161,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleSE;
     }
+    console.log(this.resizeEventScrollType);
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', 9999);
   }
 
@@ -229,7 +239,11 @@ export class GridsterResizable {
   }
 
   handleN(e: any): void {
-    this.top = e.clientY + this.offsetTop - this.diffTop;
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.top = e.clientY + this.offsetTop - this.diffTop;
+    } else {
+      this.top = e.clientY - this.mouseOffsetY - this.margin + (this.gridster.el.parentElement.scrollTop + this.offsetTop);
+    }
     this.height = this.bottom - this.top;
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
@@ -262,7 +276,12 @@ export class GridsterResizable {
   }
 
   handleW(e: any): void {
-    this.left = e.clientX + this.offsetLeft - this.diffLeft;
+    if (!this.gridster.$options.draggable.dropOverItemStack) {
+      this.left = e.clientX + this.offsetLeft - this.diffLeft;
+    } else {
+      this.left = e.clientX - this.gridster.el.offsetLeft - this.mouseOffsetX - this.margin - this.gridster.el.scrollLeft;
+      this.top = e.clientY - this.mouseOffsetY - this.margin + (this.gridster.el.parentElement.scrollTop + this.offsetTop);
+    }
     this.width = this.right - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;

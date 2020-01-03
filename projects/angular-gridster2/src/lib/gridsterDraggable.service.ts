@@ -247,6 +247,10 @@ export class GridsterDraggable {
     if (this.gridster.checkGridCollision(this.gridsterItem.$item)) {
       this.gridsterItem.$item.y = this.positionYBackup;
     }
+    if (this.gridster.$options.draggable.dropOverItemStack) {
+      if (this.left < 0) this.left = 0;
+      if (this.top < 0) this.top = 0;
+    }
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, this.top);
 
     if (this.positionXBackup !== this.gridsterItem.$item.x || this.positionYBackup !== this.gridsterItem.$item.y) {
