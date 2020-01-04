@@ -22,6 +22,8 @@ export interface GridsterItem {
   left?: number;
   top?: number;
   zIndex?: number;
+  width?: number;
+  height?: number;
 
   [propName: string]: any;
 }

@@ -62,7 +62,9 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       minItemArea: undefined,
       left: undefined,
       top: undefined,
-      zIndex: undefined
+      zIndex: undefined,
+      width: undefined,
+      height: undefined
     });
   }
 

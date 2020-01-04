@@ -39,6 +39,7 @@ import {ResizeComponent} from './sections/resize/resize.component';
 import {SwapComponent} from './sections/swap/swap.component';
 import { ExtendFnComponent } from './sections/extend-fn/extend-fn.component';
 import { InsightGridsterDraggerDirective } from './core/insight-gridster.dragger.directive';
+import { environment } from 'src/environments/environment.prod';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -92,7 +93,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, { useHash: true }),
     MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule, MatDialogModule,
     GridsterModule,
     MarkdownModule.forRoot({loader: HttpClient, markedOptions: {provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}}),

@@ -48,8 +48,13 @@ export class GridsterRenderer {
       const height = (this.gridster.curRowHeight * item.rows - this.gridster.$options.margin);
       // set the cell style
       this.setCellPosition(renderer, el, x, y);
-      renderer.setStyle(el, 'width', width + 'px');
-      renderer.setStyle(el, 'height', height + 'px');
+      if (!this.gridster.$options.draggable.dropOverItemStack) {
+        renderer.setStyle(el, 'width', width + 'px');
+        renderer.setStyle(el, 'height', height + 'px');
+      } else {
+        renderer.setStyle(el, 'width', (item.width ? item.width : width) + 'px');
+        renderer.setStyle(el, 'height', (item.height ? item.height : height) + 'px');
+      }
       let marginBottom: string | null = null;
       let marginRight: string | null = null;
       if (this.gridster.$options.outerMargin) {
