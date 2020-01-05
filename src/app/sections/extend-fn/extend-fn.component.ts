@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, NgZone } from '@angular/core';
 import {DisplayGrid, GridsterComponent, GridsterConfig, GridsterItem, GridType, CompactType, GridsterItemComponentInterface, GridsterComponentInterface} from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -32,7 +32,7 @@ export class ExtendFnComponent implements OnInit {
     // console.log('overlap', source, target, grid);
   }
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private zone: NgZone) {}
 
   ngOnInit() {
     this.options = {
@@ -75,7 +75,8 @@ export class ExtendFnComponent implements OnInit {
       enableEmptyCellDrop: true,
       emptyCellDropChannel: this.emptyCellDropChannel,
       emptyCellDropCallback: this.createItem.bind(this),
-
+      itemInitCallback: this.itemInit.bind(this)
+      
     };
     this.dashboard = [
       {cols: 2, rows: 2, y: 0, x: 0, left: 100, top: 50},
@@ -85,9 +86,19 @@ export class ExtendFnComponent implements OnInit {
   
   eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
     // console.info('eventStop', item, itemComponent, event);
-    console.log(item);
+    if (itemComponent.$item.left &&　itemComponent.$item.top)　{
+      Object.assign(itemComponent, { left: itemComponent.$item.left - 10, top: itemComponent.$item.top - 10 });
+    }
     Object.assign(item, { ...itemComponent.$item });
-    console.log(this.dashboard);
+  }
+
+  itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
+    if (this.options.draggable && this.options.draggable.dropOverItemStack) {
+      setTimeout(() => {
+        Object.assign(item, { width: itemComponent.width, height: itemComponent.height});
+        Object.assign(itemComponent.$item, { width: itemComponent.width, height: itemComponent.height});
+      }, 0);
+    }
   }
 
   stackChanged(isStack: boolean) {
@@ -121,7 +132,7 @@ export class ExtendFnComponent implements OnInit {
   }
 
   zIndexChanged(gridster: GridsterComponentInterface, gridsterItem: GridsterItemComponentInterface) {
-    gridster.gridRenderer.updateItem(gridsterItem.el, gridsterItem.item, gridsterItem.renderer);
+    gridster.gridRenderer.updateItem(gridsterItem.el, gridsterItem.$item, gridsterItem.renderer);
   }
 
   changedOptions() {
@@ -140,11 +151,16 @@ export class ExtendFnComponent implements OnInit {
     this.dialog.closeAll();
   }
 
-  restoreLocalStorage() {
+  restoreLocalStorage(gridster: GridsterComponentInterface) {
     const items = localStorage.getItem('dashboard');
-    const temp = JSON.parse(items ? items : '');
-    if (temp) {
-      this.dashboard = temp;
+    if (items) {
+      const temp = JSON.parse(items ? items : '');
+      if (temp) {
+        this.dashboard = temp;
+        setTimeout(() => {
+          gridster.updateGrid();
+        }, 0);
+      }
     }
   }
 

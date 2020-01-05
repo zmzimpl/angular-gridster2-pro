@@ -49,6 +49,7 @@ export class GridsterResizable {
   newPosition: number;
   mouseOffsetX: number;
   mouseOffsetY: number;
+  firstResize = true;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
     this.gridsterItem = gridsterItem;
@@ -99,13 +100,19 @@ export class GridsterResizable {
     this.gridsterItem.renderer.addClass(this.gridsterItem.el, 'gridster-item-resizing');
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
-    this.left = this.gridsterItem.left;
-    this.top = this.gridsterItem.top;
+    this.margin = this.gridster.$options.margin;
+    if (this.gridster.$options.draggable.dropOverItemStack && this.firstResize) {
+      this.left = this.gridsterItem.left - this.margin;
+      this.top = this.gridsterItem.top - this.margin;
+      this.firstResize = false;
+    } else {
+      this.left = this.gridsterItem.left;
+      this.top = this.gridsterItem.top;
+    }
     this.width = this.gridster.$options.draggable.dropOverItemStack ? this.gridsterItem.el.clientWidth : this.gridsterItem.width;
     this.height = this.gridster.$options.draggable.dropOverItemStack ? this.gridsterItem.el.clientHeight : this.gridsterItem.height;
-    this.bottom = this.gridsterItem.top + this.height;
-    this.right = this.gridsterItem.left + this.width;
-    this.margin = this.gridster.$options.margin;
+    this.bottom = this.top + this.height;
+    this.right = this.left + this.width;
     this.offsetLeft = this.gridster.el.scrollLeft - this.gridster.el.offsetLeft;
     this.offsetTop = this.gridster.el.scrollTop - this.gridster.el.offsetTop;
     this.diffLeft = e.clientX + this.offsetLeft - this.left;
@@ -420,10 +427,12 @@ export class GridsterResizable {
 
   setItemTop(top: number): void {
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, top);
+    Object.assign(this.gridsterItem, { top, left: this.left });
   }
 
   setItemLeft(left: number): void {
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, left, this.top);
+    Object.assign(this.gridsterItem, { left, top: this.top });
   }
 
   setItemHeight(height: number): void {
