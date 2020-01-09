@@ -15,7 +15,9 @@ export class GridsterDraggable {
     clientX: number,
     clientY: number
   };
+  /** 鼠标在所在的X坐标位置 */
   mouseOffsetX: number;
+  /** 鼠标所在的Y坐标位置 */
   mouseOffsetY: number;
   offsetLeft: number;
   offsetTop: number;
@@ -59,6 +61,7 @@ export class GridsterDraggable {
   }
 
   destroy(): void {
+    // 堆叠模式下无需预览放置效果
     if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {
       this.gridster.previewStyle(true);
     }
@@ -108,12 +111,14 @@ export class GridsterDraggable {
     this.top = this.gridsterItem.top - this.margin;
     this.width = this.gridsterItem.width;
     this.height = this.gridsterItem.height;
+    
+    // 这里记录鼠标的位置，堆叠模式下会用到
     this.mouseOffsetX = e.offsetX;
     this.mouseOffsetY = e.offsetY;
     this.diffLeft = e.clientX + this.offsetLeft - this.margin - this.left;
     this.diffTop = e.clientY + this.offsetTop - this.margin - this.top;
     this.gridster.movingItem = this.gridsterItem.$item;
-    if (!this.gridster.$options.draggable.dropOverItemStack) {
+    if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle(true);
     }
     this.push = new GridsterPush(this.gridsterItem);
@@ -121,6 +126,8 @@ export class GridsterDraggable {
     this.gridster.dragInProgress = true;
     this.gridster.updateGrid();
     this.path.push({x: this.gridsterItem.item.x || 0, y: this.gridsterItem.item.y || 0});
+    
+    // 拖拽时要确保当前拖拽的item在最上面
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', 9999);
   }
 
@@ -140,6 +147,7 @@ export class GridsterDraggable {
       this.left = e.clientX + this.offsetLeft - this.diffLeft;
       this.top = e.clientY + this.offsetTop - this.diffTop;
     } else {
+      // 堆叠模式下位置的计算跟原来的有所不同，需要重新计算
       this.left = e.clientX - this.gridster.el.offsetLeft - this.mouseOffsetX - this.margin - this.gridster.el.scrollLeft;
       this.top = e.clientY - this.mouseOffsetY - this.margin + (this.gridster.el.parentElement.scrollTop + this.offsetTop);
     }
@@ -172,6 +180,7 @@ export class GridsterDraggable {
         Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
           .then(this.makeDrag.bind(this), this.cancelDrag.bind(this));
       } else {
+        // 堆叠模式下，停止拖拽时无需考虑其他item的大小位置，也不能影响到其他item，所以无需执行makeDrag和cancelDrag方法
         Promise.resolve(this.gridster.options.draggable.stop(this.gridsterItem.item, this.gridsterItem, e))
       }
     } else {
@@ -180,11 +189,12 @@ export class GridsterDraggable {
     setTimeout(() => {
       if (this.gridster) {
         this.gridster.movingItem = null;
-        if (!this.gridster.$options.draggable.dropOverItemStack) {
+        if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
           this.gridster.previewStyle(true);
         }
       }
     });
+    // 停止拖拽时，如果设置了item的z-index，此时应将z-index从9999改回原值，如果没设置，默认为1
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', this.gridsterItem.item.zIndex || 1);
   }
 
@@ -248,6 +258,7 @@ export class GridsterDraggable {
       this.gridsterItem.$item.y = this.positionYBackup;
     }
     if (this.gridster.$options.draggable.dropOverItemStack) {
+      // 这里是限制item的拖放不能超出左、上两处边缘，同理可以根据业务需要限制右、下两处，这里暂不限制
       if (this.left < 0) this.left = 0;
       if (this.top < 0) this.top = 0;
     }
@@ -279,7 +290,7 @@ export class GridsterDraggable {
       }
       this.push.checkPushBack();
     }
-    if (!this.gridster.$options.draggable.dropOverItemStack) {
+    if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle(true);
     }
   }

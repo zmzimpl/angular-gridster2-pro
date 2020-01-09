@@ -84,6 +84,9 @@ export class ExtendFnComponent implements OnInit {
     ]
   }
   
+  /**
+   * 拖拽结束，同步一下属性，这个操作可以写在组件内，如果考虑高自由度，则还是以现在的方法
+   */
   eventStop(item: GridsterItem, itemComponent: GridsterItemComponentInterface, event: MouseEvent) {
     // console.info('eventStop', item, itemComponent, event);
     if (itemComponent.$item.left &&　itemComponent.$item.top)　{
@@ -92,6 +95,9 @@ export class ExtendFnComponent implements OnInit {
     Object.assign(item, { ...itemComponent.$item });
   }
 
+  /**
+   * 这个是item在完成加载时的回调，同样是同步一下属性，也可写在组件内
+   */
   itemInit(item: GridsterItem, itemComponent: GridsterItemComponentInterface) {
     if (this.options.draggable && this.options.draggable.dropOverItemStack) {
       setTimeout(() => {

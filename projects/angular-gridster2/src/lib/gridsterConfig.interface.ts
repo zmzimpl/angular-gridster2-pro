@@ -130,8 +130,8 @@ export interface Draggable extends DragBase {
   dragHandleClass?: string;
   dropOverItems?: boolean;
   dropOverItemsCallback?: (source: GridsterItem, target: GridsterItem, grid?: GridsterComponentInterface) => void;
-  dropOverItemStack?: boolean,
-  dropOverItemSplit?: boolean
+  dropOverItemStack?: boolean, 	// 允许Item放入另一个Item中切分目标Item的大小，开启时要保证dropOverItemStack为false
+  dropOverItemSplit?: boolean	// 允许Item堆叠，即可自由布局，开启时要保证dropOverItemSplit为false
 }
 
 export interface Resizable extends DragBase {

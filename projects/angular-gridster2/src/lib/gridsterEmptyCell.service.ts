@@ -28,7 +28,7 @@ export class GridsterEmptyCell {
   destroy(): void {
     delete this.initialItem;
     delete this.gridster.movingItem;
-    if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {
+    if (this.gridster.previewStyle && !this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle();
     }
     delete this.gridster;
@@ -62,7 +62,7 @@ export class GridsterEmptyCell {
       });
       this.emptyCellExit = this.gridster.renderer.listen('document', 'dragend', () => {
         this.gridster.movingItem = null;
-        if (!this.gridster.$options.draggable.dropOverItemStack) {
+        if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
           this.gridster.previewStyle();
         }
       });
@@ -123,6 +123,7 @@ export class GridsterEmptyCell {
     // 分裂模式
     if (item.spliting && item.splitingItemComponent) {
       const overItem = item.splitingItemComponent.item;
+      // 根据当前分裂位置，对被分割的item大小进行处理
       switch (item.spliting) {
         case GridsterItemSplitMode.up:
           overItem.y += item.rows;
@@ -151,6 +152,7 @@ export class GridsterEmptyCell {
     e.preventDefault();
     e.stopPropagation();
     // 通道过滤，不能让所有东西都能拖拽进来
+    // 可拖拽进入的元素都会加上指令insightGridsterDragger，这个指令会在拖拽时给元素加上一个dragChannel = 'gridster'的属性，只有这个属性，才能被拖拽进来
     const draggingDom = (<any>e.srcElement || e.target).ownerDocument.querySelector('[dragChannel]');
     if (!draggingDom || 'gridster' != draggingDom.getAttribute('dragChannel')) {
       e.dataTransfer.dropEffect = 'none';
@@ -165,7 +167,7 @@ export class GridsterEmptyCell {
       e.dataTransfer.dropEffect = 'none';
       this.gridster.movingItem = null;
     }
-    if (!this.gridster.$options.draggable.dropOverItemStack) {
+    if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle();
     }
   }
@@ -183,7 +185,7 @@ export class GridsterEmptyCell {
     }
     this.initialItem = item;
     this.gridster.movingItem = item;
-    if (!this.gridster.$options.draggable.dropOverItemStack) {
+    if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle();
     }
     this.gridster.zone.runOutsideAngular(() => {
@@ -203,7 +205,7 @@ export class GridsterEmptyCell {
     }
 
     this.gridster.movingItem = item;
-    if (!this.gridster.$options.draggable.dropOverItemStack) {
+    if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
       this.gridster.previewStyle();
     }
   }
@@ -224,7 +226,7 @@ export class GridsterEmptyCell {
       this.initialItem = null;
       if (this.gridster) {
         this.gridster.movingItem = null;
-        if (!this.gridster.$options.draggable.dropOverItemStack) {
+        if (!this.gridster.$options.draggable.dropOverItemStack) {   // 堆叠模式下无需预览放置效果
           this.gridster.previewStyle();
         }
       }
@@ -325,7 +327,7 @@ export class GridsterEmptyCell {
     // if (!this.gridster.$options.enableOccupiedCellDrop && this.gridster.checkCollision(item)) {
     //   return;
     // }
-    // 非分裂需要校验单元格冲突
+    // 非分裂、非堆叠模式需要校验单元格冲突
     if (!this.gridster.$options.draggable.dropOverItemSplit && !this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(item)) {
       return;
     }
@@ -336,6 +338,7 @@ export class GridsterEmptyCell {
     item.spliting = mode; // 记录当前分裂模式
     item.splitingItemComponent = overItem; // 记录分裂谁
     switch (mode) {
+      // 根据当前分裂位置，对item大小、位置进行处理
       case GridsterItemSplitMode.up: // 上
         item.x = overItem.$item.x;
         item.y = overItem.$item.y;

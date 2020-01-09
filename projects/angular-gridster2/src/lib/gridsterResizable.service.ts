@@ -47,8 +47,12 @@ export class GridsterResizable {
   width: number;
   height: number;
   newPosition: number;
+
+  /** 堆叠模式下记录鼠标X坐标位置 */
   mouseOffsetX: number;
+  /** 堆叠模式下记录鼠标Y坐标位置 */
   mouseOffsetY: number;
+  /** 堆叠模式下第一次调整大小，会受边距影响有所偏移，通过这个字段来标识并对偏移量进行处理 */
   firstResize = true;
 
   constructor(gridsterItem: GridsterItemComponentInterface, gridster: GridsterComponentInterface, private zone: NgZone) {
@@ -102,6 +106,7 @@ export class GridsterResizable {
     this.lastMouse.clientY = e.clientY;
     this.margin = this.gridster.$options.margin;
     if (this.gridster.$options.draggable.dropOverItemStack && this.firstResize) {
+      // 堆叠模式下第一次调整大小时，会受外边距影响导致item有所偏移，这里对其单独处理
       this.left = this.gridsterItem.left - this.margin;
       this.top = this.gridsterItem.top - this.margin;
       this.firstResize = false;
@@ -109,6 +114,7 @@ export class GridsterResizable {
       this.left = this.gridsterItem.left;
       this.top = this.gridsterItem.top;
     }
+    // 堆叠模式下，直接应用元素的宽、高
     this.width = this.gridster.$options.draggable.dropOverItemStack ? this.gridsterItem.el.clientWidth : this.gridsterItem.width;
     this.height = this.gridster.$options.draggable.dropOverItemStack ? this.gridsterItem.el.clientHeight : this.gridsterItem.height;
     this.bottom = this.top + this.height;
@@ -161,6 +167,7 @@ export class GridsterResizable {
       this.resizeEventScrollType.e = true;
       this.directionFunction = this.handleSE;
     }
+    // 调整大小时，也要保证item不被其他元素遮挡
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', 9999);
   }
 
@@ -176,6 +183,9 @@ export class GridsterResizable {
 
     this.lastMouse.clientX = e.clientX;
     this.lastMouse.clientY = e.clientY;
+    this.zone.run(() => {
+      this.gridster.updateGrid();
+    });
   }
 
   dragStop(e: any): void {
@@ -199,10 +209,13 @@ export class GridsterResizable {
         this.makeResize();
       }
     } else {
+      // 堆叠模式下
       if (this.gridster.options.resizable && this.gridster.options.resizable.stop) {
+        // 如果定义了调整大小后的回调函数，则先调用后设置宽、高
         Promise.resolve(this.gridster.options.resizable.stop(this.gridsterItem.item, this.gridsterItem, e))
           .then(this.setItemHeight.bind(this, this.gridsterItem.el.height), this.setItemWidth.bind(this, this.gridsterItem.el.width));
-      } {
+      } else {
+        // 如果没有定义回调函数，直接设置宽、高
         this.setItemHeight(this.gridsterItem.el.height);
         this.setItemWidth(this.gridsterItem.el.width);
       }
@@ -216,8 +229,12 @@ export class GridsterResizable {
         }
       }
     });
-    Object.assign(this.gridsterItem.item, { width: this.gridsterItem.el.clientWidth, height: this.gridsterItem.el.clientHeight });
-    Object.assign(this.gridsterItem.$item, { width: this.gridsterItem.el.clientWidth, height: this.gridsterItem.el.clientHeight });
+    // 堆叠模式下要把宽、高存起来
+    if (this.gridster.$options.draggable.dropOverItemStack) {
+      Object.assign(this.gridsterItem.item, { width: this.gridsterItem.el.clientWidth, height: this.gridsterItem.el.clientHeight });
+      Object.assign(this.gridsterItem.$item, { width: this.gridsterItem.el.clientWidth, height: this.gridsterItem.el.clientHeight });
+    }
+    // 恢复z-index
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'z-index', this.gridsterItem.item.zIndex || 1);
   }
 
@@ -261,6 +278,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.y = this.newPosition;
       this.pushResize.pushItems(this.pushResize.fromSouth);
       this.push.pushItems(this.push.fromSouth, this.gridster.$options.disablePushOnResize);
+      // 非堆叠模式下要校验单元格位置冲突
       if (!this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.y = this.itemBackup[1];
         this.gridsterItem.$item.rows = this.itemBackup[3];
@@ -294,6 +312,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.x = this.newPosition;
       this.pushResize.pushItems(this.pushResize.fromEast);
       this.push.pushItems(this.push.fromEast, this.gridster.$options.disablePushOnResize);
+      // 非堆叠模式下要校验单元格位置冲突
       if (!this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.x = this.itemBackup[0];
         this.gridsterItem.$item.cols = this.itemBackup[2];
@@ -324,6 +343,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.rows = this.newPosition - this.gridsterItem.$item.y;
       this.pushResize.pushItems(this.pushResize.fromNorth);
       this.push.pushItems(this.push.fromNorth, this.gridster.$options.disablePushOnResize);
+      // 非堆叠模式下要校验单元格位置冲突
       if (!this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.rows = this.itemBackup[3];
         this.setItemHeight(this.gridster.positionYToPixels(this.gridsterItem.$item.rows) - this.margin);
@@ -351,6 +371,7 @@ export class GridsterResizable {
       this.gridsterItem.$item.cols = this.newPosition - this.gridsterItem.$item.x;
       this.pushResize.pushItems(this.pushResize.fromWest);
       this.push.pushItems(this.push.fromWest, this.gridster.$options.disablePushOnResize);
+      // 非堆叠模式下要校验单元格位置冲突
       if (!this.gridster.$options.draggable.dropOverItemStack && this.gridster.checkCollision(this.gridsterItem.$item)) {
         this.gridsterItem.$item.cols = this.itemBackup[2];
         this.setItemWidth(this.gridster.positionXToPixels(this.gridsterItem.$item.cols) - this.margin);
@@ -427,21 +448,25 @@ export class GridsterResizable {
 
   setItemTop(top: number): void {
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, top);
-    Object.assign(this.gridsterItem, { top, left: this.left });
+    if (this.gridster.$options.draggable.dropOverItemStack) {
+      // 保存位置信息
+      Object.assign(this.gridsterItem, { top, left: this.left });
+    }
   }
 
   setItemLeft(left: number): void {
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, left, this.top);
-    Object.assign(this.gridsterItem, { left, top: this.top });
+    if (this.gridster.$options.draggable.dropOverItemStack) {
+      // 保存位置信息
+      Object.assign(this.gridsterItem, { left, top: this.top });
+    }
   }
 
   setItemHeight(height: number): void {
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'height', height + 'px');
-    // this.gridsterItem.height = height;
   }
 
   setItemWidth(width: number): void {
     this.gridsterItem.renderer.setStyle(this.gridsterItem.el, 'width', width + 'px');
-    // this.gridsterItem.width = width;
   }
 }

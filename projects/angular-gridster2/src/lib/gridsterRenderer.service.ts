@@ -32,9 +32,11 @@ export class GridsterRenderer {
       renderer.setStyle(el, 'margin-bottom', this.gridster.$options.margin + 'px');
       renderer.setStyle(el, 'margin-right', '');
     } else {
+      // 这里的x,y 其实是left 和 top
       let x = 0;
       let y = 0;
       if (this.gridster.$options.draggable.dropOverItemStack) {
+        // 堆叠模式下，位置的不能直接通过计算过去，应该优先应用具体的位置信息
         x = item.left !== undefined ? item.left - this.gridster.$options.margin : Math.round(this.gridster.curColWidth * item.x);
         y = item.top !== undefined ? item.top - this.gridster.$options.margin : Math.round(this.gridster.curRowHeight * item.y);
         if (item.zIndex) {
@@ -52,6 +54,7 @@ export class GridsterRenderer {
         renderer.setStyle(el, 'width', width + 'px');
         renderer.setStyle(el, 'height', height + 'px');
       } else {
+        // 如果item设置了宽、高，应该优先应用
         renderer.setStyle(el, 'width', (item.width ? item.width : width) + 'px');
         renderer.setStyle(el, 'height', (item.height ? item.height : height) + 'px');
       }
@@ -196,6 +199,7 @@ export class GridsterRenderer {
       } else {
         let left = 0;
         let top = 0;
+        // 这里对左、上边缘位置限制处理，避免元素渲染到边缘以外去
         if (x < 0 || y < 0) {
           if (x < 0 && y >= 0) {
             left = this.getLeftMargin();

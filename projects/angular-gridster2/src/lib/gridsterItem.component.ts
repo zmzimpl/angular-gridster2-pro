@@ -60,6 +60,8 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
       minItemCols: undefined,
       maxItemArea: undefined,
       minItemArea: undefined,
+      
+      // 以下5个属性主要用于堆叠模式
       left: undefined,
       top: undefined,
       zIndex: undefined,
@@ -87,6 +89,7 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
     let top = 0;
     let left = 0;
     if (this.gridster.$options.draggable.dropOverItemStack) {
+    // 如果是堆叠模式，并且item设置了top 和 left 信息，则应该应用其所拥有的值，如果没有设置，才去计算
       top = this.$item.top !== undefined ? this.$item.top : this.$item.y * this.gridster.curRowHeight;
       left = this.$item.left !== undefined ? this.$item.left : this.$item.x * this.gridster.curColWidth;
     } else {

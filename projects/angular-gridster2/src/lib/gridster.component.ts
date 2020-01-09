@@ -329,6 +329,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         itemComponent.notPlaced = true;
       }
     }
+    // 如果开启了自由布局（堆叠模式），初始化的时候要设置item的位置
     if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
       if (itemComponent.item.left !== undefined && itemComponent.item.top !== undefined) {
         itemComponent.left = itemComponent.item.left;
@@ -411,6 +412,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
     if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
+    // 因为堆叠模式下，实际上是允许item拖放到任何地方的，所以这里无需自动匹配位置
       itemComponent.notPlaced = false;
       itemComponent.item.x = itemComponent.$item.x;
       itemComponent.item.y = itemComponent.$item.y;
