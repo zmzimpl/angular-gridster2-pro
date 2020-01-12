@@ -261,6 +261,14 @@ export class GridsterDraggable {
       // 这里是限制item的拖放不能超出左、上两处边缘，同理可以根据业务需要限制右、下两处，这里暂不限制
       if (this.left < 0) this.left = 0;
       if (this.top < 0) this.top = 0;
+
+      // 下面的代码如果启用，则会限制item不能超出右、下边缘
+      if (this.gridsterItem.$item.left && this.gridsterItem.el.clientWidth && (this.left + this.gridsterItem.el.clientWidth >= (this.gridster.curWidth - this.margin))) {
+        this.left = this.gridsterItem.$item.left = this.gridster.curWidth - this.margin - this.gridsterItem.el.clientWidth;
+      }
+      if (this.gridsterItem.$item.top && this.gridsterItem.el.clientHeight && (this.top + this.gridsterItem.el.clientHeight >= (this.gridster.curHeight - this.margin))) {
+        this.top = this.gridsterItem.$item.top = this.gridster.curHeight - this.margin - this.gridsterItem.el.clientHeight;
+      }
     }
     this.gridster.gridRenderer.setCellPosition(this.gridsterItem.renderer, this.gridsterItem.el, this.left, this.top);
 

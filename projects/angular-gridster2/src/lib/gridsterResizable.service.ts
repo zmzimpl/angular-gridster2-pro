@@ -336,6 +336,9 @@ export class GridsterResizable {
     if (this.minHeight > this.height) {
       this.height = this.minHeight;
     }
+    if (this.height + this.top > this.gridster.curHeight) {
+      this.height = this.gridster.curHeight - this.top - this.margin;
+    }
     this.bottom = this.top + this.height;
     this.newPosition = this.gridster.pixelsToPositionY(this.bottom, Math.ceil);
     if ((this.gridsterItem.$item.y + this.gridsterItem.$item.rows) !== this.newPosition) {
@@ -363,6 +366,9 @@ export class GridsterResizable {
     this.width = e.clientX + this.offsetLeft - this.diffRight - this.left;
     if (this.minWidth > this.width) {
       this.width = this.minWidth;
+    }
+    if (this.width + this.left > this.gridster.curWidth) {
+      this.width = this.gridster.curWidth - this.left - this.margin;
     }
     this.right = this.left + this.width;
     this.newPosition = this.gridster.pixelsToPositionX(this.right, Math.ceil);
