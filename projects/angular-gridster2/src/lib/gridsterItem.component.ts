@@ -88,16 +88,20 @@ export class GridsterItemComponent implements OnInit, OnDestroy, GridsterItemCom
   updateItemSize() {
     let top = 0;
     let left = 0;
+    let width = this.gridster.curColWidth;
+    let height = this.gridster.curRowHeight;
     if (this.gridster.$options.draggable.dropOverItemStack) {
     // 如果是堆叠模式，并且item设置了top 和 left 信息，则应该应用其所拥有的值，如果没有设置，才去计算
       top = this.$item.top !== undefined ? this.$item.top : this.$item.y * this.gridster.curRowHeight;
       left = this.$item.left !== undefined ? this.$item.left : this.$item.x * this.gridster.curColWidth;
+      width = this.$item.width !== undefined ? this.$item.width : this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
+      height = this.$item.height !== undefined ? this.$item.height : this.$item.cols * this.gridster.curRowHeight - this.gridster.$options.margin;
     } else {
       top = this.$item.y * this.gridster.curRowHeight;
       left = this.$item.x * this.gridster.curColWidth;
+      width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
+      height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
     }
-    const width = this.$item.cols * this.gridster.curColWidth - this.gridster.$options.margin;
-    const height = this.$item.rows * this.gridster.curRowHeight - this.gridster.$options.margin;
 
     if (!this.init && width > 0 && height > 0) {
       this.init = true;

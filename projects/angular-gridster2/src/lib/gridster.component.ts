@@ -329,7 +329,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
         itemComponent.notPlaced = true;
       }
     }
-    // Èç¹û¿ªÆôÁË×ÔÓÉ²¼¾Ö£¨¶ÑµşÄ£Ê½£©£¬³õÊ¼»¯µÄÊ±ºòÒªÉèÖÃitemµÄÎ»ÖÃ
+    // å¦‚æœå¼€å¯äº†è‡ªç”±å¸ƒå±€ï¼ˆå †å æ¨¡å¼ï¼‰ï¼Œåˆå§‹åŒ–çš„æ—¶å€™è¦è®¾ç½®itemçš„ä½ç½®
     if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
       if (itemComponent.item.left !== undefined && itemComponent.item.top !== undefined) {
         itemComponent.left = itemComponent.item.left;
@@ -412,7 +412,7 @@ export class GridsterComponent implements OnInit, OnChanges, OnDestroy, Gridster
 
   autoPositionItem(itemComponent: GridsterItemComponentInterface): void {
     if (this.options && this.options.draggable && this.options.draggable.dropOverItemStack) {
-    // ÒòÎª¶ÑµşÄ£Ê½ÏÂ£¬Êµ¼ÊÉÏÊÇÔÊĞíitemÍÏ·Åµ½ÈÎºÎµØ·½µÄ£¬ËùÒÔÕâÀïÎŞĞè×Ô¶¯Æ¥ÅäÎ»ÖÃ
+      // å †å æ¨¡å¼ä¸‹itemä¸éœ€è¦è‡ªåŠ¨å»åŒ¹é…ä½ç½®
       itemComponent.notPlaced = false;
       itemComponent.item.x = itemComponent.$item.x;
       itemComponent.item.y = itemComponent.$item.y;
