@@ -41,7 +41,9 @@
   "files": [
     "dist/*"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "wijmo": "^5.20193.637"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.803.2",
     "@angular-devkit/build-ng-packagr": "0.803.2",

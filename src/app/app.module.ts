@@ -39,7 +39,8 @@ import {ResizeComponent} from './sections/resize/resize.component';
 import {SwapComponent} from './sections/swap/swap.component';
 import { ExtendFnComponent } from './sections/extend-fn/extend-fn.component';
 import { InsightGridsterDraggerDirective } from './core/insight-gridster.dragger.directive';
-import { environment } from 'src/environments/environment.prod';
+import { WjNavModule } from 'wijmo/wijmo.angular2.nav';
+import { MutiplePageGridComponent } from './sections/mutiple-page-grid/mutiple-page-grid.component';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -59,6 +60,7 @@ const appRoutes: Routes = [
   {path: 'swap', component: SwapComponent},
   {path: 'misc', component: MiscComponent},
   {path: 'extend-fn', component: ExtendFnComponent},
+  {path: 'mutiple-page-grid', component: MutiplePageGridComponent},
   {path: '**', redirectTo: ''}
 ];
 
@@ -86,7 +88,8 @@ const appRoutes: Routes = [
     SwapComponent,
     MiscComponent,
     ExtendFnComponent,
-    InsightGridsterDraggerDirective
+    InsightGridsterDraggerDirective,
+    MutiplePageGridComponent
   ],
   imports: [
     BrowserModule,
@@ -96,6 +99,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, { useHash: true }),
     MatIconModule, MatButtonModule, MatSelectModule, MatInputModule, MatCheckboxModule, MatSidenavModule, MatListModule, MatDialogModule,
     GridsterModule,
+    WjNavModule,
     MarkdownModule.forRoot({loader: HttpClient, markedOptions: {provide: MarkedOptions, useValue: {smartypants: true, breaks: true}}}),
   ],
   exports: [
