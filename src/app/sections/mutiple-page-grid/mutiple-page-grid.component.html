@@ -1,21 +1,29 @@
-<div class="container-fluid">
-    <wj-tab-panel>
-        <wj-tab>
-            <a>FlexGrid</a>
+<div class="container">
+    <button mat-mini-fab (click)="createDashboard()" class="add-button cols-2">
+        <mat-icon>add</mat-icon>
+    </button>
+    <button mat-mini-fab [insightGridsterDragger]="item" [insightWrapOptions]="options" class="add-button cols-2">
+        拖拽
+    </button>
+    <wj-tab-panel [(selectedIndex)]="selectedIndex">
+        <wj-tab *ngFor="let board of dashboard; let i = index">
+            <a>Page {{ i + 1 }} </a>
             <div>
-                1
-            </div>
-        </wj-tab>
-        <wj-tab>
-            <a>FlexChart</a>
-            <div>
-                2
-            </div>
-        </wj-tab>
-        <wj-tab>
-            <a>Gauges</a>
-            <div style="overflow:hidden">
-                3
+                <gridster [options]="options" #gridster [ngStyle]="backgroundStyle">
+                    <gridster-item [item]="item" #gridsterItem *ngFor="let item of board">
+                      <div class="button-holder">
+                        <div class="gridster-item-content" *ngIf="options?.draggable?.dropOverItemStack">
+                          <mat-form-field class="example-full-width">
+                            <input type="number" matInput placeholder="z-index" [(ngModel)]="item.zIndex" (ngModelChange)="zIndexChanged(gridster, gridsterItem)">
+                          </mat-form-field>
+                        </div>
+                        <button mat-mini-fab *ngIf="!item.hasContent" (mousedown)="removeItem($event, item)"
+                                (touchstart)="removeItem($event, item)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </gridster-item>
+                </gridster>
             </div>
         </wj-tab>
     </wj-tab-panel>

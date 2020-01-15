@@ -1,0 +1,15 @@
+.container {
+    height: 100%;
+}
+
+.wj-tabpanel {
+    height: calc(100% - 40px);
+}
+
+:host ::ng-deep .wj-tabpanel > div > .wj-tabpanes, :host ::ng-deep .wj-tabpanel > div > .wj-tabpanes > .wj-tabpane {
+    height: 100%;
+}
+
+ :host ::ng-deep wj-tab-panel > div:nth-child(1) {
+    height: calc(100% - 37px);
+}
