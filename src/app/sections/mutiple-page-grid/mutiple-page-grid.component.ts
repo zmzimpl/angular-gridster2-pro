@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, TemplateRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, NgZone, ViewChildren, QueryList } from '@angular/core';
 import { CompactType, GridsterConfig, GridsterItem, GridsterItemComponentInterface, GridsterComponent, GridType, DisplayGrid, GridsterComponentInterface } from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
+import { WjTabPanel } from 'wijmo/wijmo.angular2.nav';
 
 @Component({
   selector: 'app-mutiple-page-grid',
@@ -10,6 +11,10 @@ import { MatDialog } from '@angular/material/dialog';
 export class MutiplePageGridComponent implements OnInit {
 
   @ViewChild('dialogTpl', { static: false }) dialogTpl: TemplateRef<any>;
+
+  @ViewChild('wjTabPanel', { static: false }) wjTabPanel: WjTabPanel;
+
+  @ViewChildren('gridster') gridster: QueryList<GridsterComponent>;
 
   options: GridsterConfig;
   dashboard: Array<Array<GridsterItem>> = [];
@@ -80,10 +85,7 @@ export class MutiplePageGridComponent implements OnInit {
       
     };
     this.dashboard = [
-      [
-        {cols: 2, rows: 2, y: 0, x: 0, left: 100, top: 50},
-        {cols: 2, rows: 4, y: 0, x: 2, left: 120, top: 60},
-      ]
+      []
     ]
   }
   
@@ -110,47 +112,20 @@ export class MutiplePageGridComponent implements OnInit {
     }
   }
 
-  stackChanged(isStack: boolean) {
-    if (isStack) {
-      if (this.options.api && this.options.api.optionsChanged && this.options.draggable) {
-        this.options.draggable.dropOverItemSplit = false;
-        this.options.compactType = CompactType.None;
-        this.options.disableScrollHorizontal = true;
-        this.options.disableScrollVertical = true;
-        this.options.api.optionsChanged();
-      }
-    } else {
-      if (this.options.api && this.options.api.optionsChanged) {
-        this.options.compactType = CompactType.CompactUpAndLeft;
-        this.options.disableScrollHorizontal = true;
-        this.options.disableScrollVertical = true;
-        this.options.api.optionsChanged();
-      }
-    }
-  }
-
-  splitChanged(isSplit: boolean) {
-    if (isSplit) {
-      if (this.options.api && this.options.api.optionsChanged && this.options.draggable) {
-        this.options.draggable.dropOverItemStack = false;
-        this.options.disableScrollVertical = true;
-        this.options.disableScrollHorizontal = true;
-        this.options.api.optionsChanged();
-      }
-    }
-  }
-
   zIndexChanged(gridster: GridsterComponentInterface, gridsterItem: GridsterItemComponentInterface) {
     gridster.gridRenderer.updateItem(gridsterItem.el, gridsterItem.$item, gridsterItem.renderer);
   }
 
   changedOptions() {
     if (this.options.api && this.options.api.optionsChanged) {
-      this.dashboard = [];
+      this.dashboard = [[]];
       this.options.api.optionsChanged();
     }
   }
 
+  /**
+   * 保存到本地缓存中
+   */
   saveLocalStorage() {
     localStorage.setItem('dashboard', JSON.stringify(this.dashboard));
     this.dialog.open(this.dialogTpl)
@@ -160,6 +135,10 @@ export class MutiplePageGridComponent implements OnInit {
     this.dialog.closeAll();
   }
 
+  /**
+   * 从本地缓存中恢复
+   * @param gridster 
+   */
   restoreLocalStorage(gridster: GridsterComponentInterface) {
     const items = localStorage.getItem('dashboard');
     if (items) {
@@ -174,23 +153,23 @@ export class MutiplePageGridComponent implements OnInit {
   }
 
   /**
-   * 创建一个新的面板
+   * 创建一个新的gridster面板
    */
   createDashboard() {
-    this.dashboard.push([]);
+    this.dashboard = [...this.dashboard, []];
+    this.selectedIndex = this.dashboard.length - 1;
   }
 
   /**
-   * 创建一个图表
+   * 当tab变化时要重新获取容器的大小
+   * @param selectedIndex 
    */
-  createItem(event: MouseEvent, item: GridsterItem) {
-    if (this.options.draggable &&　this.options.draggable.dropOverItemStack)　{
-      item.rows = 2;
-      item.cols = 2;
-    }
-    item.minItemRows = this.options.minItemRows;
-    item.minItemCols = this.options.minItemCols;
-    this.dashboard[this.selectedIndex].push(item);
+  tabIndexChanged(selectedIndex) {
+    this.gridster.forEach((item, index) => {
+      if (index === selectedIndex) {
+        item.resize();
+      }
+    })
   }
 
 
@@ -206,14 +185,28 @@ export class MutiplePageGridComponent implements OnInit {
     }
   }
 
+  /**
+   * 创建一个图表
+   */
+  createItem(event: MouseEvent, item: GridsterItem) {
+    if (this.options.draggable &&　this.options.draggable.dropOverItemStack)　{
+      item.rows = 2;
+      item.cols = 2;
+    }
+    item.minItemRows = this.options.minItemRows;
+    item.minItemCols = this.options.minItemCols;
+    this.dashboard[this.selectedIndex].push(item);
+  }
+
+  /**
+   * 删除图表
+   * @param $event 
+   * @param item 
+   */
   removeItem($event, item) {
     $event.preventDefault();
     $event.stopPropagation();
     this.dashboard[this.selectedIndex].splice(this.dashboard[this.selectedIndex].indexOf(item), 1);
-  }
-
-  addItem() {
-    this.dashboard[this.selectedIndex].push({x: 0, y: 0, cols: 1, rows: 1});
   }
 
 }

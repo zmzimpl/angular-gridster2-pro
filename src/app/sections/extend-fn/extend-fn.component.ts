@@ -78,10 +78,6 @@ export class ExtendFnComponent implements OnInit {
       itemInitCallback: this.itemInit.bind(this)
       
     };
-    this.dashboard = [
-      {cols: 2, rows: 2, y: 0, x: 0, left: 100, top: 50},
-      {cols: 2, rows: 4, y: 0, x: 2, left: 120, top: 60},
-    ]
   }
   
   /**

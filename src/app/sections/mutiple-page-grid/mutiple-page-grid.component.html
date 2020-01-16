@@ -1,11 +1,20 @@
 <div class="container">
+    <!-- 添加一页 -->
     <button mat-mini-fab (click)="createDashboard()" class="add-button cols-2">
-        <mat-icon>add</mat-icon>
+        添加
     </button>
+    <!-- 拖拽此按钮到面板生产item -->
     <button mat-mini-fab [insightGridsterDragger]="item" [insightWrapOptions]="options" class="add-button cols-2">
         拖拽
     </button>
-    <wj-tab-panel [(selectedIndex)]="selectedIndex">
+    <button mat-mini-fab (click)="saveLocalStorage()" class="add-button cols-2">
+        保存
+    </button>
+    <button mat-mini-fab (click)="restoreLocalStorage()" class="add-button cols-2">
+        恢复
+    </button>
+    <wj-tab-panel #wjTabPanel [(selectedIndex)]="selectedIndex" (selectedIndexChange)="tabIndexChanged($event)">
+        <!-- dashboard是一个二维数组，直接循环即可 -->
         <wj-tab *ngFor="let board of dashboard; let i = index">
             <a>Page {{ i + 1 }} </a>
             <div>
@@ -28,3 +37,13 @@
         </wj-tab>
     </wj-tab-panel>
 </div>
+
+<ng-template #dialogTpl>
+  <h1 mat-dialog-title>保存成功</h1>
+  <div mat-dialog-content>
+    <p>当前布局已保存在本地缓存中，刷新界面点击恢复可查看效果！</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="close()">Ok</button>
+  </div>
+</ng-template>
